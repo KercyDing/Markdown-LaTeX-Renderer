@@ -1,6 +1,7 @@
 # Markdown & LaTeX Renderer
 
 一个简洁、强大的 Markdown 和 LaTeX 实时渲染工具，支持即时预览和数学公式渲染。
+![example](https://github.com/user-attachments/assets/987e48c5-abf2-43ae-975c-59d061135076)
 
 ## 主要特性
 
