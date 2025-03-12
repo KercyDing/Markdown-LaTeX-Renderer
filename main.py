@@ -4,7 +4,9 @@ from PyQt6.QtWidgets import (QApplication, QWidget, QTextEdit, QVBoxLayout,
                              QHBoxLayout, QPushButton, QScrollArea, QSplitter)
 from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtWebEngineWidgets import QWebEngineView
+from PyQt6.QtGui import QIcon
 import markdown2
+import os
 
 
 class MarkdownRenderer(QWidget):
@@ -13,6 +15,7 @@ class MarkdownRenderer(QWidget):
         self.init_ui()
         self.setWindowTitle('Markdown & LaTeX Renderer')
         self.setGeometry(200, 100, 1280, 800)  # 调整窗口位置和大小，使其更大且居中显示
+        self.setWindowIcon(QIcon(app_icon_path))  # 添加窗口图标
 
     def init_ui(self):
         # 设置整体窗口样式
@@ -168,6 +171,18 @@ class MarkdownRenderer(QWidget):
             </script>
             <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js' async></script>
             <style>
+                /* 自定义滚动条样式 */
+                ::-webkit-scrollbar {{
+                    width: 10px;
+                    background: rgba(0, 0, 0, 0.05);
+                }}
+                ::-webkit-scrollbar-thumb {{
+                    background: rgba(0, 0, 0, 0.2);
+                    border-radius: 5px;
+                }}
+                ::-webkit-scrollbar-thumb:hover {{
+                    background: rgba(0, 0, 0, 0.3);
+                }}
                 body {{ 
                     font-family: "Helvetica Neue", Arial; 
                     margin: 25px; 
@@ -377,13 +392,19 @@ class MarkdownRenderer(QWidget):
 
 
     def delayed_render(self):
-        """当文本内容变化时，延迟3秒后自动渲染"""
-        # 重置定时器，确保在用户停止输入3秒后才渲染
+        """当文本内容变化时，延迟0.5秒后自动渲染"""
+        # 重置定时器，确保在用户停止输入0.5秒后才渲染
         self.render_timer.stop()
         self.render_timer.start(500)  # 500毫秒
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+    if getattr(sys, 'frozen', False):
+        base_path = sys._MEIPASS
+    else:
+        base_path = os.path.dirname(os.path.abspath(__file__))
+    app_icon_path = os.path.join(base_path, 'icon', 'app.ico')
+    app.setWindowIcon(QIcon(app_icon_path))  # 设置任务栏图标
     window = MarkdownRenderer()
     window.show()
     sys.exit(app.exec())
